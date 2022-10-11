@@ -1,10 +1,22 @@
-from flask import Flask
+import json
+from flask import Flask, request
+from flask_cors import CORS
 
-app=Flask(__name__)
+api=Flask(__name__)
+CORS(api)
 
-@app.route("/login")
-def login():
-    return {"msg":["msg1","msg2","msg3"]  }
+@api.route('/login', methods=["POST"])
+def create_token():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "test" or password != "test":
+        return {"msg": "Wrong email or password"}
+    return {"login":True}
+
+
+@api.route("/logout", methods=["POST"])
+def logout():
+    return {"login": False}
 
 if __name__=='__main__':
-    app.run(debug=True)
+    api.run(debug=True)

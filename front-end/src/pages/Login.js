@@ -13,35 +13,29 @@ export default function Login({ setUser }) {
   };
 
   const fetchData = async () => {
-    // try {
-    //   const res = await fetch("/login", {
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       email,
-    //       password,
-    //     }),
-    //   });
-    //   const data = await res.json();
-    //   console.log(data);
-    //   setUser(); //set user here
-    //   navigate("/");
-    // } catch (er) {
-    //   console.log(er.message);
-    //   setError(); //set error here
-    // }
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("http://127.0.0.1:5000/login");
+    try {
+      const res = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
       const data = await res.json();
-      console.log(data);
-    };
-    fetchData();
-  }, []);
+      if (data.msg) {
+        throw new Error(data.msg);
+      }
+      setUser(data.login); //set user here
+      navigate("/");
+    } catch (er) {
+      console.log(er.message);
+      setError(er.message); //set error here
+    }
+  };
 
   return (
     <div className="d-flex justify-content-center">
